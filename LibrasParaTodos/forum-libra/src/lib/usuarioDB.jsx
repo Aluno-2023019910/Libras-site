@@ -36,13 +36,30 @@ export async function gravaUsuario(formData) {
     const email = xss(formData.get('email').trim())
     const senha = xss(formData.get('senha').trim())
     const adm = false;
+    console.log(nome + email + senha + adm)
 
-    if(nome && email && senha){
+    if(nome){
+
         await Usuario.insertOne(({nome,email,senha,adm}))   
         redirect('/')
     }
 
 
+}
+
+export async function Login(formData) {
+    await connDB();
+    const email = xss(formData.get('email').trim())
+    const senha = xss(formData.get('senha').trim())
+    getUsuarios.forEach(usua => {
+        if(usua.email.equals(email) && usua.senha.equals(senha)) {
+            console.log("faz alog");
+        }
+    }); 
+
+    
+    
+    
 }
 
 export async function apagaUsuario(id,imagem,video){
