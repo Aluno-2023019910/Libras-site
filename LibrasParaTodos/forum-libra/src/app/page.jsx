@@ -1,4 +1,5 @@
 import Enviar from "@/components/enviar";
+import Singup from "@/components/singup";
 import Image from "next/image";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     
       <div>
         <h1>Teste</h1>
+        <Singup></Singup>
         <Enviar></Enviar>
       </div>
   );
