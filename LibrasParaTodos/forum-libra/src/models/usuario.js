@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 
 const usuarioSchema = new mongoose.Schema({
-    titulo: String,
-    descricao: String,
-
-    videoExemplo: String,
-    imagemMao: String,
-
-
+    nome: String,
+    email: String,
+    senha: String,
+    adm: Boolean
 })
 
 const Usuario = mongoose.models.Usuario || mongoose.model('Usuario', usuarioSchema)
