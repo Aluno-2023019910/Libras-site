@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const postlibraSchema = new mongoose.Schema({
     titulo: String,
     descricao: String,
-
+    emailDono: String, 
     videoExemplo: String,
     imagemMao: String,
 

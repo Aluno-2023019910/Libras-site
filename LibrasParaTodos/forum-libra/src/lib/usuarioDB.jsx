@@ -27,6 +27,56 @@ export async function getUsuarios() {
 export async function getUsuario(id) {
     await connDB();
     return await Usuario.findById(id)
+    //{ <field>: { $eq: <value> } }
+}
+export async function getUsuarioByEmail(email) {
+    await connDB();
+    
+
+    const usu = await Usuario.findOne({ email: { $eq: email } });
+
+    return usu;
+    
+    
+}
+export async function veriEmail(email) {
+    await connDB();
+    
+
+    const usu = await Usuario.findOne({ email: { $eq: email } });
+
+  
+    if (!usu) {
+      
+        return true;
+       
+    }
+
+   
+    return false;
+    
+}
+
+export async function login(email, senha) {
+    await connDB();
+    
+
+    const usu = await Usuario.findOne({ email: { $eq: email } });
+
+    const senhaCorreta = (senha === usu.senha);
+    if (!senhaCorreta) {
+        console.log("erro");
+        return null;
+       
+    }
+    console.log("certo");
+   
+    return {
+        id: usu._id,
+        nome: usu.nome,
+        email: usu.email,
+        adm: usu.adm
+      };
     
 }
 
@@ -45,21 +95,6 @@ export async function gravaUsuario(formData) {
     }
 
 
-}
-
-export async function Login(formData) {
-    await connDB();
-    const email = xss(formData.get('email').trim())
-    const senha = xss(formData.get('senha').trim())
-    getUsuarios.forEach(usua => {
-        if(usua.email.equals(email) && usua.senha.equals(senha)) {
-            console.log("faz alog");
-        }
-    }); 
-
-    
-    
-    
 }
 
 export async function apagaUsuario(id,imagem,video){

@@ -1,14 +1,40 @@
-import Enviar from "@/components/enviar";
-import Singup from "@/components/singup";
-import Image from "next/image";
+'use client'
+
+import Login from "@/components/login";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Home() {
-  return (
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
     
+    return <p>Carregando sessão...</p>;
+  }
+
+
+  if (session) {
+     return (
+     
       <div>
-        <h1>Teste</h1>
-        <Singup></Singup>
-        <Enviar></Enviar>
+         <button onClick={() => signOut()}>Logout</button>
+         <p>Logado como: {session.user?.email}</p>
+        <p>Nome: {session.nome}</p>
+        <p>Admin: {session.adm ? "Sim" : "Não"}</p>
+        
+        </div>
+     )     
+  }
+
+  return (
+   
+      
+      <div>
+        
+      
+        <Login></Login>
+        
+        
       </div>
+     
   );
 }

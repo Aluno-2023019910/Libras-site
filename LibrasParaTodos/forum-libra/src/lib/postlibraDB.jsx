@@ -27,10 +27,21 @@ export async function getPostLibras() {
 
 export async function getPostLibra(id) {
     await connDB();
-    // await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log(id)
     return await PostLibra.findById(id)
     
 }
+
+export async function searchPost(titulo) {
+    await connDB();
+  
+   
+    const posts = await PostLibra.find({
+      titulo: { $regex: titulo, $options: "i" }
+    });
+  
+    return posts;
+  }
 
 function geraNomeImagem(titulo, nomeImagem){
     return `${titulo.substring(0,15)}-${nomeImagem.substring(nomeImagem.length-15)}`
@@ -60,46 +71,51 @@ async function apagaImagem(imagem){
 
 export async function gravaPostLibra(formData) {
     await connDB();
+    const emailDono = xss(formData.get('emailDono').trim())
     const titulo = xss(formData.get('titulo').trim())
     const descricao = xss(formData.get('descricao').trim())
-    const imagemMao = formData.get('imagemMao')
+    const imagemMao = formData.get("imagemMao");
     
     const nomeImagem = geraNomeImagem(titulo, imagemMao.name)
     gravaImagem(imagemMao, nomeImagem)
     if(titulo){
-        await PostLibra.insertOne(({titulo,descricao,imagem: nomeImagem}))   
+        await PostLibra.insertOne(({titulo,descricao,emailDono,imagemMao: nomeImagem}))   
         redirect('/')
     }
 
 
 }
 
-// export async function editaPostLibra(PostLibra) {
-//     await connDB();
-//     const id = PostLibra.id
-//     const titulo = xss(PostLibra.titulo)
-//     const descricao = xss(PostLibra.descricao)
-//     const imagem = PostLibra.imagem
-//     const imagemAntiga = PostLibra.imagemAntiga
-//     let PostLibraEditada = {}
-//     if (imagem.name && (imagem.name != 'undefined')){
-//         const nomeImagem = geraNomeImagem(titulo, imagem.name)
-//         PostLibraEditada = {titulo, descricao, imagem: nomeImagem}
-//         apagaImagem( imagemAntiga)
-//         gravaImagem(imagem, nomeImagem)
-//     }
-//     else{
-//         PostLibraEditada = {titulo,descricao}
-
-//     }
-//     await PostLibra.findByIdAndUpdate(id, PostLibraEditada,{runValidators: true})
-//     redirect(`/adm/PostLibras`)
-// }
-
-export async function apagaPostLibra(id,imagem,video){
+export async function editaPostLibra(formData) {
     await connDB();
-    apagaImagem(imagem)
-    apagaVideo(video)
+
+
+    const id = formData.get("id")
+    const titulo = xss(formData.get('titulo').trim())
+    const descricao = xss(formData.get('descricao').trim())
+    const imagem = formData.get("imagemMao");
+   
+
+    const imagemAntiga = formData.get("imagemAntiga");
+    let PostLibraEditada = {}
+    if (imagem && imagem.name && imagem.name !== 'undefined'){
+        const nomeImagem = geraNomeImagem(titulo, imagem.name)
+        PostLibraEditada = {titulo, descricao, imagemMao: nomeImagem}
+        apagaImagem( imagemAntiga)
+        gravaImagem(imagem, nomeImagem)
+    }
+    else{
+        PostLibraEditada = {titulo,descricao}
+
+    }
+    await PostLibra.findByIdAndUpdate(id, PostLibraEditada,{runValidators: true});
+    
+    redirect(`/busca/postlibra/edit/${id}`)
+}
+
+export async function apagaPostLibra(id,imagemMao){
+    await connDB();
+    apagaImagem(imagemMao)
     await PostLibra.findByIdAndDelete(id)
     revalidatePath(`/`);
 }

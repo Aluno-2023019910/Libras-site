@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
-import Usuario from "./usuario";
 
 const comentarioSchema = new mongoose.Schema({
     postalvo: String,
-    autor: Usuario,
-
+    autor: String,
     conteudo: String
 
 })
