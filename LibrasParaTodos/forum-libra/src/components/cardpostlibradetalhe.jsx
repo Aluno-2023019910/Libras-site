@@ -6,11 +6,13 @@ import { useSession } from "next-auth/react";
 import { apagaPostLibra } from "@/lib/postlibraDB";
 import { useRouter } from "next/navigation";
 import Comentario from "./cometario";
+import { getComentario } from "@/lib/comentario";
+import CardComentario from "./cardcomentario";
 
 
 export default function CardPostLibraDetalhe({ id, emailDono, titulo, descricao, imagemMao }) {
   const { data: session } = useSession(); 
-
+  const come = getComentario(id)
   const dono = session?.user?.email === emailDono || session?.adm === true;
   const router = useRouter();
 
@@ -51,7 +53,16 @@ export default function CardPostLibraDetalhe({ id, emailDono, titulo, descricao,
             <Comentario postalvo={id}/>
 
        )} 
-
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                    Comentarios:
+                </h2>
+                {come.length === 0 ? (
+                <p className="text-gray-500">Nenhum comentario.</p>
+                ) : (
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+                        {come.map(c => <li key={c.id}><CardComentario id={c.id} conteudo={c.conteudo} autor={c.autor} /></li>)}
+                    </ul>
+                )}
     </div>
   );
 }

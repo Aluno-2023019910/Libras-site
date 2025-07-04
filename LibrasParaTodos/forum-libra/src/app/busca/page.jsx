@@ -25,7 +25,7 @@ export default function PaginaBusca({ searchParams }) {
                     </ul>
                 )}
 
-              {/* <p className="voltar"><Link href='/adm'> &#8592; Voltar</Link></p> */}
+            
               
             </div>
           
