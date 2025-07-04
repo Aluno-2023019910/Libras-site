@@ -21,7 +21,7 @@ export async function getComentario(postalvo) {
     await connDB();
     
     // id
-    const usu = await Comentario.findOne({ postalvo: postalvo });
+    const usu = await Comentario.find({ postalvo: postalvo });
 
     return usu;
     

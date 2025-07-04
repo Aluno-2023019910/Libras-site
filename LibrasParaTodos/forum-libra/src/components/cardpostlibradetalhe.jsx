@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 import Comentario from "./cometario";
 import { getComentario } from "@/lib/comentario";
 import CardComentario from "./cardcomentario";
-
+import { use } from "react";
 
 export default function CardPostLibraDetalhe({ id, emailDono, titulo, descricao, imagemMao }) {
   const { data: session } = useSession(); 
-  const come = getComentario(id)
+  const come = use(getComentario(id))
   const dono = session?.user?.email === emailDono || session?.adm === true;
   const router = useRouter();
 
